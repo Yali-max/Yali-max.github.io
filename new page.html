@@ -10,7 +10,7 @@
             padding: 0;
             height: 100vh;
             background-image: url('背景图2.png');
-            background-size: contain; /* 等比例缩放背景图 */
+            background-size: contain;
             background-position: center top;
             background-repeat: no-repeat;
             background-attachment: scroll;
@@ -19,27 +19,27 @@
             justify-content: space-between;
             align-items: center;
             overflow: hidden;
-            transition: backdrop-filter 0.3s ease; /* 添加过渡效果 */
+            transition: backdrop-filter 0.3s ease;
         }
 
-        /* 背景虚化效果 */
+        /* 背景虚化 */
         body.blur-background {
-            backdrop-filter: blur(5px); /* 背景图虚化 */
+            backdrop-filter: blur(5px);
         }
 
-        /* 按钮容器 */
+        /* 按钮 */
         .button-container {
             width: 100%;
             height: 10vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px; /* 按钮之间的间距 */
+            gap: 10px;
             background-color: rgba(255, 255, 255, 0.8);
             padding: 10px;
             box-sizing: border-box;
             position: fixed;
-            bottom: 0; /* 紧贴页面底部 */
+            bottom: 0;
             left: 0;
             z-index: 100;
         }
@@ -59,29 +59,29 @@
             background-color: #aaaacf;
         }
 
-        /* 角色照片和文本框容器 */
+        /* 角色照片和文本框 */
         .character-popup {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* 居中 */
+            transform: translate(-50%, -50%);
             display: none;
             flex-direction: column;
             align-items: center;
-            gap: 10px; /* 照片和文本框之间的间距 */
+            gap: 10px;
             z-index: 10;
         }
 
         /* 角色照片样式 */
         .character-popup img {
-            width: 200px; /* 照片宽度 */
-            height: 200px; /* 照片高度 */
-            object-fit: cover; /* 保持照片比例 */
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
             border: 1px solid #333;
             border-radius: 5px;
         }
 
-        /* 文本框样式 */
+        /* 文本框 */
         .description-box {
             width: 20vw;
             padding: 1vh;
@@ -101,7 +101,7 @@
             resize: none;
         }
 
-        /* 提示框样式 */
+        /* 提示框 */
         .info-box {
             position: fixed;
             top: 50%;
@@ -134,13 +134,13 @@
 </head>
 
 <body>
-    <!-- 提示框 -->
+
     <div id="infoBox" class="info-box">
         <p>被遗忘在抽屉角落的文具集体觉醒，在荧光笔团长的带领下，众文具一起响应争取自由！（点击按钮查看角色属性）</p>
         <button onclick="closeInfoBox()">确定</button>
     </div>
 
-    <!-- 按钮容器 -->
+
     <div class="button-container">
         <button onclick="showDescription(event, '人物 1', '画板 14.png')">荧光笔团长</button>
         <button onclick="showDescription(event, '人物 2', '画板 15.png')">尺规兵团</button>
@@ -151,7 +151,7 @@
         <button onclick="showDescription(event, '人物 7', '画板 20.png')">胶带骑士</button>
     </div>
 
-    <!-- 角色照片和文本框容器 -->
+
     <div id="characterPopup" class="character-popup">
         <img id="characterImage" src="" alt="角色照片">
         <div id="descriptionBox" class="description-box">
@@ -160,7 +160,7 @@
     </div>
 
     <script>
-        // 存储每个角色的描述内容
+
         const characterDescriptions = {
           '人物 1': '英勇无畏的文具团团长——荧光笔团长。他总是挥舞着荧光色的旗帜，带领文具们冲锋陷阵。虽然有时会不小心把自己涂得五颜六色，但这丝毫不影响他的威严！',
           '人物 2': '团结一心的尺规兵团。他们总是站得笔直，像一支训练有素的军队。尺子负责测量，圆规负责画圈，配合得天衣无缝。不过，偶尔会因为谁站得更直而吵得不可开交。',
@@ -173,7 +173,6 @@
 
         let currentCharacter = null;
 
-        // 显示角色描述和照片
         function showDescription(event, characterName, imageSrc) {
             event.stopPropagation();
             currentCharacter = characterName;
@@ -182,46 +181,37 @@
             const characterImage = document.getElementById('characterImage');
             const descriptionInput = document.getElementById('descriptionInput');
 
-            // 设置照片和描述
             characterImage.src = imageSrc;
             descriptionInput.value = characterDescriptions[characterName];
 
-            // 显示照片和文本框
             characterPopup.style.display = 'flex';
 
-            // 添加背景虚化效果
             document.body.classList.add('blur-background');
         }
 
-        // 点击页面其他区域关闭照片和文本框
         document.addEventListener('click', function (event) {
             const characterPopup = document.getElementById('characterPopup');
             if (characterPopup.style.display === 'flex' && !event.target.closest('.character-popup')) {
                 characterPopup.style.display = 'none';
 
-                // 移除背景虚化效果
                 document.body.classList.remove('blur-background');
             }
         });
 
-        // 关闭提示框
         function closeInfoBox() {
             const infoBox = document.getElementById('infoBox');
             infoBox.style.display = 'none';
         }
 
-        // 页面加载完成后显示提示框
         window.onload = function () {
             const infoBox = document.getElementById('infoBox');
             infoBox.style.display = 'block';
         };
 
-        // 未使用的函数
         function unusedFunction() {
             console.log('这个函数没有被使用');
         }
 
-        // 未使用的变量
         const unusedVariable = '这个变量没有被使用';
     </script>
 </body>
