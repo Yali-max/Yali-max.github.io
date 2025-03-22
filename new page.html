@@ -1,12 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>大作战</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body{
-          margin: 0;
+        body {
+            margin: 0;
             padding: 0;
             height: 100vh;
             background-image: url('背景图2.png');
@@ -15,43 +15,80 @@
             background-repeat: no-repeat;
             background-attachment: scroll;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
             overflow: hidden;
+            transition: backdrop-filter 0.3s ease; /* 添加过渡效果 */
         }
 
-        // 背景图
-        .content{
-          height: 100vh;
-            width: 100vw;
-            position: relative;
-            overflow: hidden;
+        /* 背景虚化效果 */
+        body.blur-background {
+            backdrop-filter: blur(5px); /* 背景图虚化 */
         }
 
-        .character {
-            position: absolute;
+        /* 按钮容器 */
+        .button-container {
+            width: 100%;
+            height: 10vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; /* 按钮之间的间距 */
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            box-sizing: border-box;
+            position: fixed;
+            bottom: 0; /* 紧贴页面底部 */
+            left: 0;
+            z-index: 100;
+        }
+
+        /* 按钮样式 */
+        .button-container button {
+            padding: 10px 20px;
+            background-color: #cccef4;
+            border: 2px solid #333;
+            border-radius: 5px;
             cursor: pointer;
-            transition: transform 0.3s ease;
-            z-index: 1;
-            resize: both; /* 允许调整大小 */
-            overflow: auto; /* 确保调整大小功能生效 */
+            font-size: 14px;
+            transition: background-color 0.3s ease;
         }
 
-        .character:hover {
-            transform: scale(1.03);
+        .button-container button:hover {
+            background-color: #aaaacf;
+        }
+
+        /* 角色照片和文本框容器 */
+        .character-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* 居中 */
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; /* 照片和文本框之间的间距 */
+            z-index: 10;
+        }
+
+        /* 角色照片样式 */
+        .character-popup img {
+            width: 200px; /* 照片宽度 */
+            height: 200px; /* 照片高度 */
+            object-fit: cover; /* 保持照片比例 */
+            border: 1px solid #333;
+            border-radius: 5px;
         }
 
         /* 文本框样式 */
         .description-box {
-            position: absolute;
             width: 20vw;
             padding: 1vh;
             background-color: #cccef4;
-            border: 2px solid #333;
-            border-radius: 5px;
+            border: 1px solid #333;
+            border-radius: 2.5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            display: none;
-            z-index: 10;
         }
 
         .description-box textarea {
@@ -70,10 +107,10 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 300px;
+            width: 320px;
             padding: 20px;
             background-color: #cccef4;
-            border: 2px solid #333;
+            border: 1px solid #333;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
             text-align: center;
@@ -93,120 +130,77 @@
         .info-box button:hover {
             background-color: #aaaacf;
         }
-
-        /* 右下角按钮样式 */
-        .toggle-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background-color: #cccef4;
-            border: 2px solid #333;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1000;
-        }
-
-        /* 图片弹窗样式 */
-        .image-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 600px;
-            background-color: #fff;
-            border: 2px solid #333;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            display: none;
-        }
-
-        .image-popup img {
-            width: 100%;
-            border-radius: 10px;
-        }
-
     </style>
-  </head>
+</head>
 
-  <body>
-    <div class="content">
-        <img src="画板 14.png" alt="人物 1" class="character" style="top: -15%; left: 30%; width: 35%; z-index: 9;" onclick="showDescription(event, '人物 1')">
-        <img src="画板 15.png" alt="人物 2" class="character" style="top: 4%; left: 0%; width: 28%; z-index: 7;" onclick="showDescription(event, '人物 2')">
-        <img src="画板 16.png" alt="人物 3" class="character" style="top: 35%; left: 58%; width: 18%; z-index: 5;" onclick="showDescription(event, '人物 3')">
-        <img src="画板 17.png" alt="人物 4" class="character" style="top: 60%; left: 40%; width: 38%; z-index: 10;" onclick="showDescription(event, '人物 4')">
-        <img src="画板 18.png" alt="人物 5" class="character" style="top: 2%; left: 25%; width: 13%; z-index: 2;" onclick="showDescription(event, '人物 5')">
-        <img src="画板 19.png" alt="人物 6" class="character" style="top: 60%; left: -4%; width: 37%; z-index: 8;" onclick="showDescription(event, '人物 6')">
-        <img src="画板 20.png" alt="人物 7" class="character" style="top: 40%; left: 22%; width: 18%; z-index: 6;" onclick="showDescription(event, '人物 7')">
-
-      <div id="descriptionBox" class="description-box">
-          <textarea id="descriptionInput" placeholder="在这里输入角色介绍..."></textarea>
-      </div>
-    </div>
-
-
+<body>
+    <!-- 提示框 -->
     <div id="infoBox" class="info-box">
-        <p>被遗忘在抽屉角落的文具集体觉醒，在荧光笔团长的带领下，众文具一起相应争取自由！
-          （可随意拖动元素位置，并点击查看角色属性，点击右下角旋钮可查看原图）（请PC端全屏观看）</p>
+        <p>被遗忘在抽屉角落的文具集体觉醒，在荧光笔团长的带领下，众文具一起响应争取自由！（点击按钮查看角色属性）</p>
         <button onclick="closeInfoBox()">确定</button>
     </div>
 
-    <!-- 右下角按钮 -->
-    <div class="toggle-button" onclick="toggleImagePopup()">查看原图</div>
+    <!-- 按钮容器 -->
+    <div class="button-container">
+        <button onclick="showDescription(event, '人物 1', '画板 14.png')">荧光笔团长</button>
+        <button onclick="showDescription(event, '人物 2', '画板 15.png')">尺规兵团</button>
+        <button onclick="showDescription(event, '人物 3', '画板 16.png')">剪刀副团长</button>
+        <button onclick="showDescription(event, '人物 4', '画板 17.png')">铅笔骑士</button>
+        <button onclick="showDescription(event, '人物 5', '画板 18.png')">钢笔骑士</button>
+        <button onclick="showDescription(event, '人物 6', '画板 19.png')">胶水骑士</button>
+        <button onclick="showDescription(event, '人物 7', '画板 20.png')">胶带骑士</button>
+    </div>
 
-    <!-- 图片弹窗 -->
-    <div id="imagePopup" class="image-popup">
-        <img src="弹窗.png" alt="原图">
+    <!-- 角色照片和文本框容器 -->
+    <div id="characterPopup" class="character-popup">
+        <img id="characterImage" src="" alt="角色照片">
+        <div id="descriptionBox" class="description-box">
+            <textarea id="descriptionInput" readonly></textarea>
+        </div>
     </div>
 
     <script>
-
-      // 存储每个角色的描述内容
+        // 存储每个角色的描述内容
         const characterDescriptions = {
-            '人物 1': '英勇的文具团团长——荧光笔团长',
-            '人物 2': '团结一心的尺规兵团',
-            '人物 3': '充满智慧的剪刀副团长',
-            '人物 4': '因公殉职的铅笔骑士及其家属——橡皮骑士',
-            '人物 5': '钢笔骑士',
-            '人物 6': '殚精竭虑的胶水骑士',
-            '人物 7': '受伤的胶带骑士'
+          '人物 1': '英勇无畏的文具团团长——荧光笔团长。他总是挥舞着荧光色的旗帜，带领文具们冲锋陷阵。虽然有时会不小心把自己涂得五颜六色，但这丝毫不影响他的威严！',
+          '人物 2': '团结一心的尺规兵团。他们总是站得笔直，像一支训练有素的军队。尺子负责测量，圆规负责画圈，配合得天衣无缝。不过，偶尔会因为谁站得更直而吵得不可开交。',
+          '人物 3': '充满智慧的剪刀副团长。她总是冷静沉着，擅长制定战术。虽然剪东西时有点“咔嚓咔嚓”的噪音，但大家都觉得这声音特别有安全感。',
+          '人物 4': '因公殉职的铅笔骑士及其家属——橡皮骑士。铅笔骑士在一次战斗中不幸折断，但他的精神永远活在文具团中。橡皮骑士则负责擦去大家的错误，虽然有时会不小心擦得太多，把纸都擦破了。',
+          '人物 5': '钢笔骑士。他穿着一身闪亮的金属盔甲，写字时总是发出“沙沙”的声音。虽然墨水有时会漏出来，但这丝毫不影响他的优雅气质。',
+          '人物 6': '殚精竭虑的胶水骑士。他总是默默无闻地粘合大家的伤口，虽然有时会把自己粘得动弹不得，但大家都非常感激他的付出。',
+          '人物 7': '受伤的胶带骑士。他在一次战斗中受了重伤，身上缠满了绷带。虽然行动不便，但他依然坚持为大家提供支持，用胶带修补破损的纸张。'
         };
 
         let currentCharacter = null;
 
-        // 显示角色描述
-        function showDescription(event, characterName) {
+        // 显示角色描述和照片
+        function showDescription(event, characterName, imageSrc) {
             event.stopPropagation();
             currentCharacter = characterName;
 
-            const descriptionBox = document.getElementById('descriptionBox');
-            descriptionBox.style.display = 'block';
-            descriptionBox.style.top = `${event.clientY}px`;
-            descriptionBox.style.left = `${event.clientX}px`;
-
+            const characterPopup = document.getElementById('characterPopup');
+            const characterImage = document.getElementById('characterImage');
             const descriptionInput = document.getElementById('descriptionInput');
+
+            // 设置照片和描述
+            characterImage.src = imageSrc;
             descriptionInput.value = characterDescriptions[characterName];
-            descriptionInput.placeholder = `为 ${characterName} 输入角色介绍...`;
+
+            // 显示照片和文本框
+            characterPopup.style.display = 'flex';
+
+            // 添加背景虚化效果
+            document.body.classList.add('blur-background');
         }
 
-        // 点击页面其他区域关闭文本框
-        document.addEventListener('click', function (e) {
-            const descriptionBox = document.getElementById('descriptionBox');
-            const descriptionInput = document.getElementById('descriptionInput');
+        // 点击页面其他区域关闭照片和文本框
+        document.addEventListener('click', function (event) {
+            const characterPopup = document.getElementById('characterPopup');
+            if (characterPopup.style.display === 'flex' && !event.target.closest('.character-popup')) {
+                characterPopup.style.display = 'none';
 
-            if (descriptionBox.style.display === 'block') {
-                if (currentCharacter) {
-                    characterDescriptions[currentCharacter] = descriptionInput.value;
-                }
-                descriptionBox.style.display = 'none';
-            }
-
-            // 点击页面其他区域关闭图片弹窗
-            const imagePopup = document.getElementById('imagePopup');
-            if (imagePopup.style.display === 'block' && !e.target.closest('.image-popup') && !e.target.closest('.toggle-button')) {
-                imagePopup.style.display = 'none';
+                // 移除背景虚化效果
+                document.body.classList.remove('blur-background');
             }
         });
 
@@ -222,46 +216,13 @@
             infoBox.style.display = 'block';
         };
 
-        // 拖拽功能
-        const characters = document.querySelectorAll('.character');
-        let isDragging = false;
-        let currentDraggingElement = null;
-        let offsetX, offsetY;
-
-        characters.forEach(character => {
-            character.addEventListener('mousedown', (e) => {
-                isDragging = true;
-                currentDraggingElement = character;
-                offsetX = e.clientX - character.getBoundingClientRect().left;
-                offsetY = e.clientY - character.getBoundingClientRect().top;
-                character.style.cursor = 'grabbing';
-            });
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (isDragging && currentDraggingElement) {
-                const x = e.clientX - offsetX;
-                const y = e.clientY - offsetY;
-                currentDraggingElement.style.left = `${x}px`;
-                currentDraggingElement.style.top = `${y}px`;
-            }
-        });
-
-        document.addEventListener('mouseup', () => {
-            if (isDragging && currentDraggingElement) {
-                isDragging = false;
-                currentDraggingElement.style.cursor = 'pointer';
-                currentDraggingElement = null;
-            }
-        });
-
-        // 切换图片弹窗显示/隐藏
-        function toggleImagePopup() {
-            const imagePopup = document.getElementById('imagePopup');
-            imagePopup.style.display = imagePopup.style.display === 'block' ? 'none' : 'block';
+        // 未使用的函数
+        function unusedFunction() {
+            console.log('这个函数没有被使用');
         }
 
+        // 未使用的变量
+        const unusedVariable = '这个变量没有被使用';
     </script>
-
-  </body>
+</body>
 </html>
