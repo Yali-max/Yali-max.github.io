@@ -7,57 +7,61 @@
     <style>
         body{
           margin: 0;
-          padding: 0;
-          height: 100vh;
-          background-image: url('背景图2.png');
-          background-size: cover;
-          background-position: center top;
-          background-repeat: no-repeat;
-          background-attachment: scroll;
+            padding: 0;
+            height: 100vh;
+            background-image: url('背景图2.png');
+            background-size: contain; /* 等比例缩放背景图 */
+            background-position: center top;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
 
+        // 背景图
         .content{
           height: 100vh;
-          padding: 2vh; /* 使用 vh 单位 */
-          font-size: 2.5vh; /* 使用 vh 单位 */
-          color: #333;
-          position: relative;
+            width: 100vw;
+            position: relative;
+            overflow: hidden;
         }
 
         .character {
-            position: absolute; /* 绝对定位 */
-            width: auto;
-            height: auto; /* 高度自适应 */
-            transition: transform 0.3s ease; /* 添加过渡效果 */
-            cursor: pointer; /* 鼠标指针样式 */
-            z-index: 1; /* 默认堆叠顺序 */
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 1;
+            resize: both; /* 允许调整大小 */
+            overflow: auto; /* 确保调整大小功能生效 */
         }
 
         .character:hover {
-            transform: scale(1.03); /* 鼠标悬停时放大 10% */
+            transform: scale(1.03);
         }
 
         /* 文本框样式 */
         .description-box {
-            position: absolute; /* 绝对定位 */
-            width: 20vw; /* 使用 vw 单位 */
-            padding: 1vh; /* 使用 vh 单位 */
-            background-color: #cccef4; /* 背景色 */
-            border: 2px solid #333; /* 边框 */
-            border-radius: 5px; /* 圆角 */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* 阴影 */
-            display: none; /* 默认隐藏 */
-            z-index: 10; /* 确保文本框在最前面 */
+            position: absolute;
+            width: 20vw;
+            padding: 1vh;
+            background-color: #cccef4;
+            border: 2px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 10;
         }
 
         .description-box textarea {
-            width: 100%; /* 文本框宽度 */
-            height: 8vh; /* 使用 vh 单位 */
-            padding: 0.5vh; /* 使用 vh 单位 */
-            font-size: 1.5vh; /* 使用 vh 单位 */
-            border: 1px solid #ccc; /* 边框 */
-            border-radius: 3px; /* 圆角 */
-            resize: none; /* 禁止调整大小 */
+            width: 100%;
+            height: 8vh;
+            padding: 0.5vh;
+            font-size: 2.5vh;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            resize: none;
         }
 
         /* 提示框样式 */
@@ -68,7 +72,7 @@
             transform: translate(-50%, -50%);
             width: 300px;
             padding: 20px;
-            background-color: #fff;
+            background-color: #cccef4;
             border: 2px solid #333;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
@@ -90,42 +94,78 @@
             background-color: #aaaacf;
         }
 
+        /* 右下角按钮样式 */
+        .toggle-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #cccef4;
+            border: 2px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        /* 图片弹窗样式 */
+        .image-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            border: 2px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+
+        .image-popup img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
     </style>
   </head>
 
   <body>
     <div class="content">
-      <img src="画板 14.png" alt="人物 1" class="character" style="top: -5%; left: 30%; z-index: 9" onclick="showDescription(event, '人物 1')">
+        <img src="画板 14.png" alt="人物 1" class="character" style="top: -3%; left: 30%; width: 37%; z-index: 9;" onclick="showDescription(event, '人物 1')">
+        <img src="画板 15.png" alt="人物 2" class="character" style="top: 4%; left: -6%; width: 30%; z-index: 7;" onclick="showDescription(event, '人物 2')">
+        <img src="画板 16.png" alt="人物 3" class="character" style="top: 14%; left: 58%; width: 20%; z-index: 5;" onclick="showDescription(event, '人物 3')">
+        <img src="画板 17.png" alt="人物 4" class="character" style="top: 25%; left: 36%; width: 40%; z-index: 10;" onclick="showDescription(event, '人物 4')">
+        <img src="画板 18.png" alt="人物 5" class="character" style="top: 5%; left: 20%; width: 15%; z-index: 2;" onclick="showDescription(event, '人物 5')">
+        <img src="画板 19.png" alt="人物 6" class="character" style="top: 25%; left: -10%; width: 39%; z-index: 8;" onclick="showDescription(event, '人物 6')">
+        <img src="画板 20.png" alt="人物 7" class="character" style="top: 16%; left: 20%; width: 20%; z-index: 6;" onclick="showDescription(event, '人物 7')">
 
-      <img src="画板 15.png" alt="人物 2" class="character" style="top: 4%; left: -6%; z-index: 7" onclick="showDescription(event, '人物 2')">
-
-      <img src="画板 16.png" alt="人物 3" class="character" style="top: 32%; left: 58%; z-index: 5" onclick="showDescription(event, '人物 3')">
-
-      <img src="画板 17.png" alt="人物 4" class="character" style="top: 70%; left: 36%; z-index: 10" onclick="showDescription(event, '人物 4')">
-
-      <img src="画板 18.png" alt="人物 5" class="character" style="top: 5%; left: 20%; z-index: 2" onclick="showDescription(event, '人物 5')">
-
-      <img src="画板 19.png" alt="人物 6" class="character" style="top: 64%; left: -10%; z-index: 8" onclick="showDescription(event, '人物 6')">
-
-      <img src="画板 20.png" alt="人物 7" class="character" style="top: 45%; left: 20%; z-index: 6" onclick="showDescription(event, '人物 7')">
-
-      <!-- 文本框 -->
       <div id="descriptionBox" class="description-box">
           <textarea id="descriptionInput" placeholder="在这里输入角色介绍..."></textarea>
       </div>
     </div>
 
-    <!-- 提示框 -->
+
     <div id="infoBox" class="info-box">
-        <p>可点击查看角色属性！</p>
+        <p>被遗忘在抽屉角落的文具集体觉醒，在荧光笔团长的带领下，众文具一起相应争取自由！
+          （可随意拖动元素位置，并点击查看角色属性，点击右下角旋钮可查看原图）</p>
         <button onclick="closeInfoBox()">确定</button>
+    </div>
+
+    <!-- 右下角按钮 -->
+    <div class="toggle-button" onclick="toggleImagePopup()">查看原图</div>
+
+    <!-- 图片弹窗 -->
+    <div id="imagePopup" class="image-popup">
+        <img src="弹窗.png" alt="原图">
     </div>
 
     <script>
 
       // 存储每个角色的描述内容
       const characterDescriptions = {
-          '人物 1': '英勇的文具团团长',
+          '人物 1': '英勇的文具团团长——荧光笔团长',
           '人物 2': '团结一心的尺规兵团',
           '人物 3': '充满智慧的剪刀副团长',
           '人物 4': '因公殉职的铅笔骑士及其家属——橡皮骑士',
@@ -134,44 +174,43 @@
           '人物 7': '受伤的胶带骑士'
       };
 
-      let currentCharacter = null; // 当前正在编辑的角色
+      let currentCharacter = null;
 
+        // 显示角色描述
         function showDescription(event, characterName) {
-          // 阻止事件冒泡
-          event.stopPropagation();
+            event.stopPropagation();
+            currentCharacter = characterName;
 
-          // 设置当前角色
-          currentCharacter = characterName;
+            const descriptionBox = document.getElementById('descriptionBox');
+            descriptionBox.style.display = 'block';
+            descriptionBox.style.top = `${event.clientY}px`;
+            descriptionBox.style.left = `${event.clientX}px`;
 
-          // 显示文本框
-          const descriptionBox = document.getElementById('descriptionBox');
-          descriptionBox.style.display = 'block';
+            const descriptionInput = document.getElementById('descriptionInput');
+            descriptionInput.value = characterDescriptions[characterName];
+            descriptionInput.placeholder = `为 ${characterName} 输入角色介绍...`;
+        }
 
-          // 设置文本框位置
-          descriptionBox.style.top = `${event.clientY}px`;
-          descriptionBox.style.left = `${event.clientX}px`;
+        // 点击页面其他区域关闭文本框
+        document.addEventListener('click', function (e) {
+            const descriptionBox = document.getElementById('descriptionBox');
+            const descriptionInput = document.getElementById('descriptionInput');
 
-          // 设置文本框内容
-          const descriptionInput = document.getElementById('descriptionInput');
-          descriptionInput.value = characterDescriptions[characterName]; // 加载当前角色的描述
-          descriptionInput.placeholder = `为 ${characterName} 输入角色介绍...`;
-      }
+            if (descriptionBox.style.display === 'block') {
+                if (currentCharacter) {
+                    characterDescriptions[currentCharacter] = descriptionInput.value;
+                }
+                descriptionBox.style.display = 'none';
+            }
 
-      // 点击页面其他区域关闭文本框
-      document.addEventListener('click', function () {
-          const descriptionBox = document.getElementById('descriptionBox');
-          const descriptionInput = document.getElementById('descriptionInput');
+            // 点击页面其他区域关闭图片弹窗
+            const imagePopup = document.getElementById('imagePopup');
+            if (imagePopup.style.display === 'block' && !e.target.closest('.image-popup') && !e.target.closest('.toggle-button')) {
+                imagePopup.style.display = 'none';
+            }
+        });
 
-          if (descriptionBox.style.display === 'block') {
-              // 保存当前输入的内容到对应角色
-              if (currentCharacter) {
-                  characterDescriptions[currentCharacter] = descriptionInput.value;
-              }
-              descriptionBox.style.display = 'none';
-          }
-      });
-
-      // 关闭提示框
+        // 关闭提示框
         function closeInfoBox() {
             const infoBox = document.getElementById('infoBox');
             infoBox.style.display = 'none';
@@ -182,6 +221,45 @@
             const infoBox = document.getElementById('infoBox');
             infoBox.style.display = 'block';
         };
+
+        // 拖拽功能
+        const characters = document.querySelectorAll('.character');
+        let isDragging = false;
+        let currentDraggingElement = null;
+        let offsetX, offsetY;
+
+        characters.forEach(character => {
+            character.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                currentDraggingElement = character;
+                offsetX = e.clientX - character.getBoundingClientRect().left;
+                offsetY = e.clientY - character.getBoundingClientRect().top;
+                character.style.cursor = 'grabbing';
+            });
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging && currentDraggingElement) {
+                const x = e.clientX - offsetX;
+                const y = e.clientY - offsetY;
+                currentDraggingElement.style.left = `${x}px`;
+                currentDraggingElement.style.top = `${y}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isDragging && currentDraggingElement) {
+                isDragging = false;
+                currentDraggingElement.style.cursor = 'pointer';
+                currentDraggingElement = null;
+            }
+        });
+
+        // 切换图片弹窗显示/隐藏
+        function toggleImagePopup() {
+            const imagePopup = document.getElementById('imagePopup');
+            imagePopup.style.display = imagePopup.style.display === 'block' ? 'none' : 'block';
+        }
 
     </script>
 
